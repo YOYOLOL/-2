@@ -1,7 +1,7 @@
 const Discord = require('discord.js');
 const Client = require('./client/Client');
 const client = new Client();
-const prefix = ","
+const prefix = "/"
 const fs = require('fs');
 
 fs.readdir("./commands/", (err, files) => {
