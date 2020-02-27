@@ -1,0 +1,17 @@
+{
+  "name": "disocrd-bot",
+  "version": "0.0.0",
+  "description": "disocrd bot",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node bot.js"
+  },
+  "dependencies": {
+    "discord.js": "^11.5.1",
+    "request": "2.88.0",
+    "enmap" : "5.2.4",
+    "ytdl-core": "^1.0.7",
+    "opusscript" : "0.0.7",
+    "ffmpeg-static": "^4.0.0"
+  }
+}
