@@ -1,6 +1,5 @@
 const Discord = require('discord.js')
-module.exports.run = (client,msg, args) => { 
-msg.delete(500) 
+module.exports.run = (client,msg, args) => {  
 const queue = msg.client.queue; 
 const serverQueue = msg.client.queue.get(msg.guild.id); 
 const voiceChannel = msg.member.voiceChannel; 
