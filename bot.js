@@ -3,7 +3,21 @@ const Client = require('./client/Client');
 const client = new Client();
 const prefix = "."
 const fs = require('fs');
+client.on('ready',() => {
+var numbers = client.guilds.size
+var members = client.users.size
+var title = [
+  "",
+  " 有需要可以隨時搵我 ",
+  " 有任何問題可以諮詢我打.help ",
+  " 感謝開心遊客_HT幫忙協作"]
 
+ setInterval(() =>{
+  const index = Math.floor(Math.random() * (title.length - 1) + 1)
+  client.user.setActivity(title[index], {type: 'PLAYING'});
+ },5000)
+
+})
 fs.readdir("./commands/", (err, files) => {
   if (err) return console.error(err);
   files.forEach(file => {
