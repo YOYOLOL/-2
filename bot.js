@@ -34,7 +34,8 @@ client.on('message', msg => {
 if (!msg.content.startsWith(prefix)) return;
 	
 var messageArry = msg.content.split(" ");
-var cmd = messageArry[0];	
+var cmd = messageArry[0];
+if (cmd == `${prefix}p`) cmd = `${prefix}play` 	
 var args = messageArry.slice(1);	
 var commandfile = client.commands.get(cmd.slice(prefix.length));
  if (commandfile) {
