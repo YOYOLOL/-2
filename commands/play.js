@@ -12,14 +12,13 @@ search(args.join(' '), (err, res) => {
        
       let resp = '';
 	
-      resp += ":mag_right:正在搜尋中:`[" + args.join(' ') + "]`\n"	
-	
+      resp += ":mag_right:正在搜尋中:`[" + args.join(' ') + "]`\n"
+    
       for (var i in videos) {
             resp += `**[${parseInt(i)+1}]:** \`${videos[i].title}\`\n`;
         }
         resp += `\n**在以下選擇一個數字 \`1-${videos.length}\``;
         msg.channel.send(resp);
-
         const filter = m => !isNaN(m.content) && m.content < videos.length+1 && m.content > 0;
         const collector = msg.channel.createMessageCollector(filter, {max:1});
          
