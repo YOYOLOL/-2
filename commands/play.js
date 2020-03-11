@@ -11,6 +11,9 @@ search(args.join(' '), (err, res) => {
       let videos = res.videos.slice(0, 10);
        
       let resp = '';
+	
+      resp += ":mag_right:正在搜尋中:[" + args.join(' ') + "]`\n"	
+	
       for (var i in videos) {
             resp += `**[${parseInt(i)+1}]:** \`${videos[i].title}\`\n`;
         }
