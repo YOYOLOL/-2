@@ -1,22 +1,42 @@
 const Discord = require('discord.js');
 const ytdl = require('ytdl-core');
+const search = require('yt-search');
 
-module.exports.run =  (client,msg, args) => {
+module.exports.run = async (client,msg, args) => {
        msg.delete(500)    
-               
-      try {
+  
+search(args.join(' '), (err, res) => {
+      if(err) msg.channel.send('no')
+       
+      let videos = res.videos.slice(0, 10);
+       
+      let resp = '';
+      for (var i in videos) {
+            resp += `**[${parseInt(i)+1}]:** \`${videos[i].title}\`\n`;
+        }
+        resp += `\n**在以下選擇一個數字 \`1-${videos.length}\``;
+        msg.channel.send(resp);
+
+        const filter = m => !isNaN(m.content) && m.content < videos.length+1 && m.content > 0;
+        const collector = msg.channel.createMessageCollector(filter, {max:1});
+         
+        collector.on('collect', m => {
+        var urls = videos[(m.content) - 1].url
+	musics(urls)
+function musics(urls){
+
+try {
       const queue = msg.client.queue;
       const serverQueue = msg.client.queue.get(msg.guild.id);
 
       const voiceChannel = msg.member.voiceChannel;
       if (!voiceChannel)
-        return msg.channel.send("You need to be in a voice channel to play music!");
+        return msg.channel.send("您需要進入語音頻道才能播放音樂！");
       const permissions = voiceChannel.permissionsFor(msg.client.user);
       if (!permissions.has("CONNECT") || !permissions.has("SPEAK")) {
-        return msg.channel.send("I need the permissions to join and speak in your voice channel!");
+        return msg.channel.send("我需要獲得許可才能加入您的語音頻道並講話！");
       }
-
-      if (!args[0]) return msg.channel.send("❌沒有網址")
+      
       
       if (!serverQueue) {
         const queueContruct = {
@@ -29,13 +49,13 @@ module.exports.run =  (client,msg, args) => {
         };
 
         queue.set(msg.guild.id, queueContruct);
-
-        queueContruct.songs.push(args[0]);
+            
+        queueContruct.songs.push(urls);
       
         try {                               
-          var stream = ytdl(args[0]);
+          var stream = ytdl(urls);
           stream.on('info', (info) => {
-          return msg.channel.send("正在播放: `" + info.title + "`\n網址: " + args[0]);   
+          return msg.channel.send("正在播放: `" + info.title + "`\n網址: " + urls);   
           });
           play(msg,queueContruct.songs[0]);
         } catch (error) {
@@ -44,10 +64,10 @@ module.exports.run =  (client,msg, args) => {
           return msg.channel.send(err);
         }
       } else {
-        serverQueue.songs.push(args[0]);
-        var stream = ytdl(args[0]);
+        serverQueue.songs.push(urls);
+        var stream = ytdl(urls);
         stream.on('info', (info) => {
-        return msg.channel.send("`" + info.title + "`已新增到隊列中!\n網址: " + args[0]);   
+        return msg.channel.send("`" + info.title + "`已新增到隊列中!\n網址: " + urls);   
         });               
       }
     } catch (error) {
@@ -55,7 +75,7 @@ module.exports.run =  (client,msg, args) => {
       msg.channel.send(error.msg);
     }
 
-function play(msg) {
+ function play(msg) {
 
     const queue = msg.client.queue;
     const guild = msg.guild;
@@ -75,7 +95,14 @@ function play(msg) {
                  queue.delete(guild.id);                          
             }          
          });
-    });
+    }).catch((err) => msg.channel.send('err'))
 
-}     
-}; 
+ }	
+
+}		
+        //console.log(videos[(m.content)-1].url)
+        });
+
+})  
+       
+};
